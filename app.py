@@ -5,10 +5,10 @@ from aws_cdk import core as cdk
 
 from aws_cdk import core
 
-from is521_project_1.is521_project_1_stack import Is521Project1Stack
+from is531_project_1.is531_project_1_stack import Is531Project1Stack
 
 
 app = core.App()
-Is521Project1Stack(app, "Is521Project1Stack",)
+Is531Project1Stack(app, "Is531Project1Stack",)
 
 app.synth()
