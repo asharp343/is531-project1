@@ -21,6 +21,7 @@ class Is531Project1Stack(cdk.Stack):
 
         web_target_group = elb.ApplicationTargetGroup(self,
             'web_instance_target_group',
+            port=80,
             vpc=vpc
         )
 
