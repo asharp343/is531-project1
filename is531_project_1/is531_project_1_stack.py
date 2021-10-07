@@ -38,7 +38,12 @@ class Is531Project1Stack(cdk.Stack):
         # web_target_group.add_target(web_autoscaling_group)
         # web_autoscaling_group.attach_to_application_target_group(web_target_group)
 
-        img_bucket = s3.Bucket(self, 'img-bucket',
+        donut_img_bucket = s3.Bucket(self, 'donut-img-bucket',
+            public_read_access=True,
+            removal_policy=cdk.RemovalPolicy.DESTROY
+        )
+
+        db_img_bucket = s3.Bucket(self, 'db-img-bucket',
             public_read_access=False,
             removal_policy=cdk.RemovalPolicy.DESTROY
         )
