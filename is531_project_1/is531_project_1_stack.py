@@ -7,7 +7,8 @@ from aws_cdk import (
     aws_elasticloadbalancingv2 as elb,
     aws_lambda as _lambda,
     aws_apigateway as apigateway,
-    aws_iam as iam
+    aws_iam as iam,
+    aws_codecommit as codecommit
 )
 
 from aws_cdk import core
@@ -183,8 +184,19 @@ class Is531Project1Stack(cdk.Stack):
             'query_db_api',
             handler=query_db,
             policy=apiPolicy,
+            default_cors_preflight_options=apigateway.CorsOptions(
+                allow_origins=['*']
+
+            )
         )
 
+
+        #################### CodePipeline ########################
+        #########################################################
+        # repo = codecommit.Repository(self, 'repo',
+        #     repository_name='githubRepo'
+        # )
+        # repo.repository_clone_url_http
 
 
         ####################### Output ##########################
