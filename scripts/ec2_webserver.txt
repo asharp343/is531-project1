@@ -1,3 +1,9 @@
 sudo yum -y install httpd
+sudo yum -y install unzip
 sudo service httpd start 
+wget "https://github.com/asharp343/is531-project1/archive/refs/heads/master.zip"
+sudo unzip master.zip 
+sudo mv is531-project1-master/static_assets/website/index.html /var/www/html
+sudo mv is531-project1-master/static_assets/website/script.js   /var/www/html
+sudo mv is531-project1-master/static_assets/website/style.css  /var/www/html
 
