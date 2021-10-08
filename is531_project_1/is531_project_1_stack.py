@@ -173,17 +173,21 @@ class Is531Project1Stack(cdk.Stack):
 
         #################### CodePipeline ########################
         #########################################################
-        # repo = codecommit.Repository(self, 'repo',
-        #     repository_name='githubRepo'
-        # )
-        # repo.repository_clone_url_http
+        repo = codecommit.Repository(self, 'code-commit-repo',
+            repository_name='is531-project1'
+        )
+        repo.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
+        
 
 
         ####################### Output ##########################
         #########################################################
-        cdk.CfnOutput(self, 'import-rds-data',
+        cdk.CfnOutput(self, 'import-Rds-Data',
             value=f'aws lambda invoke --function-name {write_to_db.function_name} ~/Desktop/resoponse.json'
         )
-        cdk.CfnOutput(self, 'website-url',
+        cdk.CfnOutput(self, 'website-Url',
             value=f'http://{str(web_alb.load_balancer_dns_name)}'
+        )
+        cdk.CfnOutput(self, 'repo Remote',
+            value=repo.repository_clone_url_http
         )
