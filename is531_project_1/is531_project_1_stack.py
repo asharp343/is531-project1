@@ -77,30 +77,13 @@ class Is531Project1Stack(cdk.Stack):
 
         ########################## RDS ##########################
         #########################################################
-        # db_sg = ec2.SecurityGroup(self,
-        #     'db-sg',
-        #     vpc = vpc,
-        #     allow_all_outbound=False,
-        # )
-        # db_sg.add_ingress_rule(
-        #     peer=ec2.Peer.any_ipv4(),
-        #     connection=ec2.Port(
-        #         string_representation='db-sg',
-        #         protocol=ec2.Protocol.TCP,
-        #         from_port=80,
-        #         to_port=80
-        #     )
-        # )
-
         db_cluster = rds.ServerlessCluster(self, 'rds-cluster',
             engine=rds.DatabaseClusterEngine.aurora_postgres(version=rds.AuroraPostgresEngineVersion.VER_10_11),
             vpc=vpc,
             default_database_name='donutdb',
             vpc_subnets=ec2.SubnetSelection(subnets=vpc.private_subnets),
             removal_policy=cdk.RemovalPolicy.DESTROY,
-            # security_groups=[db_sg]
         )
-
 
 
         ########################## ALB ##########################
@@ -108,15 +91,14 @@ class Is531Project1Stack(cdk.Stack):
         web_target_group = elb.ApplicationTargetGroup(self,
             'web_instance_target_group',
             port=80,
-            vpc=vpc
+            vpc=vpc,
         )
 
-        #### FIXME add the autoscaling group to the target that the load balancer is pointing to
-        # web_target_group.add_target(web_autoscaling_group)
-        # web_autoscaling_group.attach_to_application_target_group(web_target_group)
+        web_target_group.add_target(web_autoscaling_group)
 
         web_alb = elb.ApplicationLoadBalancer(self, "my-alb",
-            vpc=vpc
+            vpc=vpc,
+            internet_facing=True
         )
 
         web_alb.add_listener(
@@ -144,7 +126,6 @@ class Is531Project1Stack(cdk.Stack):
             value=db_cluster.secret.secret_arn
         )
 
-        # Invoke this function manually in the console to import initial db data
         write_to_db = _lambda.Function(self, 'write_to_db',
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.asset('static_assets/lambda/write_to_db'),
@@ -175,7 +156,6 @@ class Is531Project1Stack(cdk.Stack):
             )
         )
 
-
         db_cluster.grant_data_api_access(query_db)
         db_cluster.grant_data_api_access(write_to_db)
 
@@ -201,12 +181,9 @@ class Is531Project1Stack(cdk.Stack):
 
         ####################### Output ##########################
         #########################################################
-        # cdk.CfnOutput(self, 'rds-endpoint',
-        #     value=str(rds_instance.instance_endpoint.hostname)
-        # )
-        # cdk.CfnOutput(self, 'rds-password',
-        #     value=str(rds_instance.secret.secret_value)
-        # )
         cdk.CfnOutput(self, 'import-rds-data',
-            value=f'aws lambda invoke --function-name {write_to_db.function_name}'
+            value=f'aws lambda invoke --function-name {write_to_db.function_name} ~/Desktop/resoponse.json'
+        )
+        cdk.CfnOutput(self, 'website-url',
+            value=f'http://{str(web_alb.load_balancer_dns_name)}'
         )
