@@ -25,13 +25,44 @@ class Is531Project1Stack(cdk.Stack):
             vpc=vpc
         )
 
+        web_sg = ec2.SecurityGroup(self,
+            'web-sg',
+            vpc = vpc,
+            allow_all_outbound=True,
+        )
+        web_sg.add_ingress_rule(
+            peer=ec2.Peer.any_ipv4(),
+            connection=ec2.Port(
+                string_representation='web-sg-http',
+                protocol=ec2.Protocol.TCP,
+                from_port=80,
+                to_port=80
+            )
+        )
+        web_sg.add_ingress_rule(
+            peer=ec2.Peer.any_ipv4(),
+            connection=ec2.Port(
+                string_representation='web-sg-ssh',
+                protocol=ec2.Protocol.TCP,
+                from_port=22,
+                to_port=22
+            )
+        )
+
         web_autoscaling_group = asg.AutoScalingGroup(self,
             'web_instance_autoscaling_group',
             instance_type=ec2.InstanceType('t2.micro'),
             machine_image=ec2.MachineImage.latest_amazon_linux(),
             vpc=vpc,
-            vpc_subnets=ec2.SubnetSelection(subnets=vpc.public_subnets)
+            vpc_subnets=ec2.SubnetSelection(subnets=vpc.public_subnets),
+            key_name='is531-project1',
+            security_group = web_sg
         )
+
+        webserver_bootstrap = open('scripts/ec2_webserver.txt', 'r').read()
+        web_autoscaling_group.add_user_data(webserver_bootstrap)
+
+
 
 
         # FIXME add the autoscaling group to the target that the load balancer is pointing to
@@ -68,9 +99,9 @@ class Is531Project1Stack(cdk.Stack):
         )
 
 
-        # cdk.CfnOutput(self, 'private-subnet-ids',
-        #     value=str(vpc.private_subnets)
-        # )
-        # cdk.CfnOutput(self, 'public-subnet-ids',
-        #     value=str(vpc.public_subnets)
-        # )
+        cdk.CfnOutput(self, 'rds-endpoint',
+            value=str(rds_instance.instance_endpoint.hostname)
+        )
+        cdk.CfnOutput(self, 'rds-password',
+            value=str(rds_instance.secret.secret_value.to_string())
+        )

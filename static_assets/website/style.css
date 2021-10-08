@@ -1,0 +1,65 @@
+.title {
+  font-family: 'Cabin', sans-serif;
+  color: #0b6a38;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+  font-size: 64px;
+}
+
+.accent-bar {
+    height: 25px;
+    text-align: center;
+    }
+    ul .accents {
+        list-style-type: none;
+        }
+        ul.accents li {
+            display: inline-block;
+            margin-left: 5px;
+            }
+            ul.accents li#first {
+                margin-left: 10px;
+            }
+            ul.accents li#last {
+                margin: 1px 0 0 15px;
+}
+
+.accents {
+  padding-left: 0;
+  
+}
+
+.horizButtons {
+  font-family: 'Cabin', sans-serif;
+  font-size: 18.08px;
+  font-weight: bold;
+  color: #0b6a38;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background-color: #FFFFFF;
+}
+
+.donutNameStyle {
+  font-family: 'Cabin', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #0b6a38;
+  margin: auto;
+  text-align: center;
+}
+
+li {
+    
+    padding: 10px 40px;
+}
+
+.container {
+  padding-top: 20px;
+}
