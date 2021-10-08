@@ -41,6 +41,7 @@ class Is531Project1Stack(cdk.Stack):
                 to_port=80
             )
         )
+        ##### Uncomment ingress rule below if you need to ssh into the web server
         # web_sg.add_ingress_rule(
         #     peer=ec2.Peer.any_ipv4(),
         #     connection=ec2.Port(
@@ -57,7 +58,7 @@ class Is531Project1Stack(cdk.Stack):
             machine_image=ec2.MachineImage.latest_amazon_linux(),
             vpc=vpc,
             vpc_subnets=ec2.SubnetSelection(subnets=vpc.public_subnets),
-            key_name='is531-project1',
+            # key_name='is531-project1', # Uncomment key_name if you need to ssh into the web server. You'll also need to create a key called "is531-project1" if you dont have one
             security_group = web_sg
         )
 
@@ -69,11 +70,6 @@ class Is531Project1Stack(cdk.Stack):
         #########################################################
         donut_img_bucket = s3.Bucket(self, 'donut-img-bucket',
             public_read_access=True,
-            removal_policy=cdk.RemovalPolicy.DESTROY
-        )
-
-        db_img_bucket = s3.Bucket(self, 'db-img-bucket',
-            public_read_access=False,
             removal_policy=cdk.RemovalPolicy.DESTROY
         )
 
@@ -101,6 +97,7 @@ class Is531Project1Stack(cdk.Stack):
             default_database_name='donutdb',
             vpc_subnets=ec2.SubnetSelection(subnets=vpc.private_subnets),
             removal_policy=cdk.RemovalPolicy.DESTROY,
+            # security_groups=[db_sg]
         )
 
 
@@ -113,7 +110,7 @@ class Is531Project1Stack(cdk.Stack):
             vpc=vpc
         )
 
-        # FIXME add the autoscaling group to the target that the load balancer is pointing to
+        #### FIXME add the autoscaling group to the target that the load balancer is pointing to
         # web_target_group.add_target(web_autoscaling_group)
         # web_autoscaling_group.attach_to_application_target_group(web_target_group)
 
@@ -146,6 +143,7 @@ class Is531Project1Stack(cdk.Stack):
             value=db_cluster.secret.secret_arn
         )
 
+        # Invoke this function manually in the console to import initial db data
         write_to_db = _lambda.Function(self, 'write_to_db',
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.asset('static_assets/lambda/write_to_db'),
@@ -180,7 +178,7 @@ class Is531Project1Stack(cdk.Stack):
         db_cluster.grant_data_api_access(query_db)
         db_cluster.grant_data_api_access(write_to_db)
 
-        db_api = apigateway.LambdaRestApi(
+        apigateway.LambdaRestApi(
             self,
             'query_db_api',
             handler=query_db,

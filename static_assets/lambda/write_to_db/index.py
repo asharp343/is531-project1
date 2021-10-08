@@ -67,17 +67,23 @@ def lambda_handler(event, context):
             (47, 'GLAZED BLUEBERRY CAKE DOUGHNUT HOLES', 'https://www.krispykreme.com/getattachment/73217a92-df7c-4703-a1d9-4e2c055ab454/Glazed-Blueberry-Cake-Doughnut-Holes.aspx?width=310&height=310&mode=max&quality=60&format=jpg', '["Cake", "Glazed", "Fruit", "OtherVarieties"]'),
             (48, 'GLAZED CHOCOLATE CAKE DOUGHNUT HOLES', 'https://www.krispykreme.com/getattachment/c9dca2e7-fcb6-4c03-b41b-89d0075b66b6/Glazed-Chocolate-Cake-Doughnut-Holes.aspx?width=310&height=310&mode=max&quality=60&format=jpg', '["Cake", "Chocolate", "Glazed", "OtherVarieties"]');'''
 
-    response_create_table = rds.execute_statement(
-        resourceArn = os.environ['CLUSTER_ARN'],
-        secretArn = os.environ['SECRET_ARN'],
-        sql = create_table
-    )
+    try:
+        response_create_table = rds.execute_statement(
+            resourceArn = os.environ['CLUSTER_ARN'],
+            secretArn = os.environ['SECRET_ARN'],
+            sql = create_table
+        )
+    except:
+        print('Table already created')
     
-    response_import_data = rds.execute_statement(
-        resourceArn = os.environ['CLUSTER_ARN'],
-        secretArn = os.environ['SECRET_ARN'],
-        sql = import_data
-    )
+    try:
+        response_import_data = rds.execute_statement(
+            resourceArn = os.environ['CLUSTER_ARN'],
+            secretArn = os.environ['SECRET_ARN'],
+            sql = import_data
+        )
+    except:
+        print('Error importing data. Make sure donut table is created')
     
     
     
