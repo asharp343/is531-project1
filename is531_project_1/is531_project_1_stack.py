@@ -207,3 +207,6 @@ class Is531Project1Stack(cdk.Stack):
         # cdk.CfnOutput(self, 'rds-password',
         #     value=str(rds_instance.secret.secret_value)
         # )
+        cdk.CfnOutput(self, 'import-rds-data',
+            value=f'aws lambda invoke --function-name {write_to_db.function_name}'
+        )
