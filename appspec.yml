@@ -1,7 +1,11 @@
 version: 0.0
 os: linux
 files:
-  - source: /static_assets/website/*
+  - source: /static_assets/website/index.html
+    destination: /var/www/html/
+  - source: /static_assets/website/script.js
+    destination: /var/www/html/
+  - source: /static_assets/website/style.css
     destination: /var/www/html/
 hooks:
   BeforeInstall:
