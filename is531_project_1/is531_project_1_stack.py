@@ -44,7 +44,7 @@ class Is531Project1Stack(cdk.Stack):
                 to_port=80
             )
         )
-        ##### Uncomment ingress rule below if you need to ssh into the web server
+        # #### Uncomment ingress rule below if you need to ssh into the web server
         # web_sg.add_ingress_rule(
         #     peer=ec2.Peer.any_ipv4(),
         #     connection=ec2.Port(
@@ -61,8 +61,8 @@ class Is531Project1Stack(cdk.Stack):
             machine_image=ec2.MachineImage.latest_amazon_linux(),
             vpc=vpc,
             vpc_subnets=ec2.SubnetSelection(subnets=vpc.public_subnets),
-            # key_name='is531-project1', # Uncomment key_name if you need to ssh into the web server. You'll also need to create a key called "is531-project1" if you dont have one
-            security_group = web_sg
+            key_name='is531-project1', # Uncomment key_name if you need to ssh into the web server. You'll also need to create a key called "is531-project1" if you dont have one
+            # security_group = web_sg
         )
 
         webserver_bootstrap = open('scripts/ec2_webserver.txt', 'r').read()
