@@ -8,7 +8,9 @@ from aws_cdk import (
     aws_lambda as _lambda,
     aws_apigateway as apigateway,
     aws_iam as iam,
-    aws_codecommit as codecommit
+    aws_codecommit as codecommit,
+    aws_codedeploy as codedeploy,
+    aws_codepipeline as codepipeline
 )
 
 from aws_cdk import core
@@ -173,7 +175,23 @@ class Is531Project1Stack(cdk.Stack):
 
         #################### CodePipeline ########################
         #########################################################
-        
+        # repo = codecommit.Repository(self, 'code-commit-repo',
+        #     repository_name='is531-project1'
+        # )
+        # repo.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
+
+        # code_deploy_app = codedeploy.ServerApplication(self, 'code_deploy_app')
+        # code_deploy_app.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
+
+        # code_deployment_group = codedeploy.ServerDeploymentGroup(self, 'code_deployment_group',
+        #     application=code_deploy_app,
+        #     auto_scaling_groups=[web_autoscaling_group]
+        # )
+
+        # pipeline = codepipeline.Pipeline(self, 'pipeline')
+        # # pipeline.add_stage(
+        # #     stage_name="push-to-repo",
+        # # )
 
 
         ####################### Output ##########################
@@ -184,3 +202,6 @@ class Is531Project1Stack(cdk.Stack):
         cdk.CfnOutput(self, 'website-Url',
             value=f'http://{str(web_alb.load_balancer_dns_name)}'
         )
+        # cdk.CfnOutput(self, 'repo Remote',
+        #     value=repo.repository_clone_url_http
+        # )

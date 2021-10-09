@@ -8,3 +8,5 @@ aws_elasticloadbalancingv2
 aws_cdk.aws_apigateway
 aws_cdk.aws_iam
 aws_cdk.aws_codecommit
+aws_cdk.aws_codedeploy
+aws_cdk.aws_codepipeline
