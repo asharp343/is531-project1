@@ -1,22 +1,22 @@
 version: 0.0
 os: linux
 files:
-  - source: /static_assets/website/index.html
+  - source: static_assets/website/index.html
     destination: /var/www/html/
-  - source: /static_assets/website/script.js
+  - source: static_assets/website/script.js
     destination: /var/www/html/
-  - source: /static_assets/website/style.css
+  - source: static_assets/website/style.css
     destination: /var/www/html/
 hooks:
   BeforeInstall:
-    - location: /scripts/pipeline/install_dependencies
+    - location: scripts/pipeline/install_dependencies
       timeout: 30
       runas: root
-    - location: /scripts/pipeline/start_server
+    - location: scripts/pipeline/start_server
       timeout: 30
       runas: root
   ApplicationStop:
-    - location: /scripts/pipeline/stop_server
+    - location: scripts/pipeline/stop_server
       timeout: 30
       runas: root
 
