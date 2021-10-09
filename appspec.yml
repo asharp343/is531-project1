@@ -9,14 +9,14 @@ files:
     destination: /var/www/html/
 hooks:
   BeforeInstall:
-    - location: scripts/pipeline/install_dependencies
+    - location: /scripts/pipeline/install_dependencies
       timeout: 30
       runas: root
-    - location: scripts/pipeline/start_server
+    - location: /scripts/pipeline/start_server
       timeout: 30
       runas: root
   ApplicationStop:
-    - location: scripts/pipeline/stop_server
+    - location: /scripts/pipeline/stop_server
       timeout: 30
       runas: root
 
