@@ -173,10 +173,6 @@ class Is531Project1Stack(cdk.Stack):
 
         #################### CodePipeline ########################
         #########################################################
-        repo = codecommit.Repository(self, 'code-commit-repo',
-            repository_name='is531-project1'
-        )
-        repo.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
         
 
 
@@ -187,7 +183,4 @@ class Is531Project1Stack(cdk.Stack):
         )
         cdk.CfnOutput(self, 'website-Url',
             value=f'http://{str(web_alb.load_balancer_dns_name)}'
-        )
-        cdk.CfnOutput(self, 'repo Remote',
-            value=repo.repository_clone_url_http
         )
